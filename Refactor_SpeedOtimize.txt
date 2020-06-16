@@ -1,0 +1,83 @@
+1. Using "for...in..."
+-----------------------------------------------
+From:
+new_feature_data = feature_data.rename(columns={'fixed acidity': 'fixed_acidity',
+                                                'volatile acidity': 'volatile_acidity',
+                                                'citric acid': 'citric_acid',
+                                                'residual sugar': 'residual_sugar',
+                                                'free sulfur dioxide': 'free_sulfur_dioxide',
+                                                'total sulfur dioxide': 'total_sulfur_dioxide'
+                                                })
+
+To:
+labels = list(feature_data.columns)
+labels[:] = [label.replace(' ', '_') for label in labels]
+feature_data.columns = labels
+
+feature_data.head()
+-----------------------------------------------
+
+2. Using def funct (avoid repeating steps of 'alcohol' to 'pH', 'residual_sugar'...)
+-----------------------------------------------
+From:
+median_alcohol = feature_data.alcohol.median()
+for i, alcohol in enumerate(feature_data.alcohol):
+    if alcohol >= median_alcohol:
+        feature_data.loc[i, 'alcohol'] = 'high'
+    else:
+        feature_data.loc[i, 'alcohol'] = 'low'
+feature_data.groupby('alcohol').quality.mean()
+
+To:
+def median_val(feature_data, feature):
+    median = getattr(getattr(feature_data, feature), "median")
+    median = median()
+    for i, feature_name in enumerate(getattr(feature_data, feature)):
+        if feature_name >= median:
+            feature_data.loc[i, feature] = 'high'
+        else:
+            feature_data.loc[i, feature] = 'low'
+    print(feature_data.groupby(feature).quality.mean(), '\n')
+
+median_val(feature_data, 'alcohol')
+
+Or: ==> only works for "pandas array" NOT numpy or python array
+def median_val(feature_data, feature):
+    median = feature_data[feature].median()
+    for i, feature_name in enumerate(feature_data[feature]):
+        if feature_name >= median:
+            feature_data.loc[i, feature] = 'high'
+        else:
+            feature_data.loc[i, feature] = 'low'
+    print(feature_data.groupby(feature).quality.mean(), '\n')
+
+median_val(feature_data, 'alcohol')
+-----------------------------------------------
+
+3. Optimizing speed:
+-----------------------------------------------
+From:
+for book in recent_books:
+    if book in coding_books:
+        recent_coding_books.append(book)
+
+To:
+numpy.intersect1d(recent_books, coding_books)
+
+Or:
+set(coding_books).intersection(recent_books)
+-----------------------------------------------
+From:
+for cost in gift_costs:
+    if cost < 25:
+        total_price += cost * 1.08  # add cost after tax
+
+To: 
+total_price =  np.sum(gift_costs[gift_costs < 25]) * 1.08
+-----------------------------------------------
+From:
+for x in list:
+    sum += x*x - y
+
+To: 
+sum((x**2 - y) for x in list)
