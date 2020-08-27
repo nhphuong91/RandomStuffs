@@ -1,0 +1,27 @@
+sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
+@chromium-browser --start-fullscreen --app=http://localhost:5000
+
+sudo nano /etc/systemd/system/startWebApp.service
+-------------------------------------------------------------------
+[Unit]
+Description=Start web UI
+After=multi-user.target
+
+[Service]
+ExecStart=/usr/bin/python3 /home/pi/camera-box/Web_App_Integration/app.py
+WorkingDirectory=/home/pi/camera-box/Web_App_Integration/
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+Type=idle
+
+[Install]
+WantedBy=multi-user.target
+--------------------------------------------------------------------
+
+sudo chmod 644 /etc/systemd/system/startWebApp.service
+
+sudo systemctl daemon-reload
+
+systemctl enable startWebApp.service
