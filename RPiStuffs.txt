@@ -6,18 +6,24 @@ sudo raspi-config
 sudo apt-get install python-smbus python3-smbus python-dev python3-dev i2c-tools
 
 sudo nano /boot/config.txt
-dtparam=i2c_arm=on
-dtparam=i2c1=on
-dtparam=i2c_arm_baudrate=400000
+dtparam=i2c=on
 dtparam=i2c_baudrate=400000
-core_freq=250 -> to keep constant stable clock rate
+dtparam=i2c_arm=on
+dtparam=i2c_arm_baudrate=400000
+dtparam=i2c1=on
+dtparam=i2c1_baudrate=400000
+core_freq=400
+core_freq_min=400
+-> to keep constant stable clock rate
 
 modprobe -r i2c_bcm2708
 modprobe i2c_bcm2708 baudrate=400000
+modprobe i2c-dev
 
 sudo nano /etc/modules
 snd-bcm2835
 i2c-dev
+i2c-bcm2708
 
 sudo nano /etc/modprobe.d/raspi-blacklist.conf
 #blacklist spi-bcm2708
