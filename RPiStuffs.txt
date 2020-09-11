@@ -1,0 +1,37 @@
+i2c
+-------------------------------------------------------------------
+sudo raspi-config
+-> enable i2c
+
+sudo apt-get install python-smbus python3-smbus python-dev python3-dev i2c-tools
+
+sudo nano /boot/config.txt
+dtparam=i2c_arm=on
+dtparam=i2c1=on
+dtparam=i2c_arm_baudrate=400000
+dtparam=i2c_baudrate=400000
+core_freq=250 -> to keep constant stable clock rate
+
+modprobe -r i2c_bcm2708
+modprobe i2c_bcm2708 baudrate=400000
+
+sudo nano /etc/modules
+snd-bcm2835
+i2c-dev
+
+sudo nano /etc/modprobe.d/raspi-blacklist.conf
+#blacklist spi-bcm2708
+#blacklist i2c-bcm2708
+
+sudo adduser pi i2c
+
+Detect i2c devices:
+ls -l /dev/*i2c*
+sudo i2cdetect -y 1
+
+sudo cat /sys/module/i2c_bcm2708/parameters/baudrate -> no longer exist
+
+Test:
+i2cget <i2c channel> <dev address> <reg_address>
+--------------------------------------------------------------------
+
