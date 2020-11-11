@@ -25,3 +25,18 @@ sudo chmod 644 /etc/systemd/system/startWebApp.service
 sudo systemctl daemon-reload
 
 systemctl enable startWebApp.service
+
+--------------------------------------------------------------------
+
+Alternative way:
+
+sudo nano /etc/rc.local
+--------------------------------------------------------------------
+#!/bin/sh -e
+
+python3 app.py &
+
+exit 0
+--------------------------------------------------------------------
+
+sudo chmod +x /etc/rc.local
