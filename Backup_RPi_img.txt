@@ -1,0 +1,14 @@
+Step 1: Read SD card using card reader
+
+Step 2: Resize partition using "disk" utility
+
+Step 3: Use below cmd to find last sector (512 Bytes) of last partition
+sudo fdisk -l /dev/<sdc>
+Ex:
+Device     Boot  Start      End Sectors  Size Id Type
+/dev/sdc1         8192   532480  524289  256M  c W95 FAT32 (LBA)
+/dev/sdc2       540672 10307583 9766912  4,7G 83 Linux
+==>> 10307583 is the last sector
+
+Step 4: Backup all sector upto last sector
+sudo dd bs=512 count=10307583 if=/dev/sdc of=~/SDCardBackup.img
