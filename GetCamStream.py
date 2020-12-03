@@ -1,5 +1,6 @@
 import cv2
 import argparse
+import sys
 
 CV_WINDOW_NAME = 'Camera'
 
@@ -61,4 +62,4 @@ def main():
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())
