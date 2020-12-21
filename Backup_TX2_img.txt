@@ -1,0 +1,25 @@
+Backup img from Jetson TX2
+1. Navigate to <home>/nvidia/nvidia_sdk/Jetpack_<version>/Linux_for_Tegra/
+2. Open terminal and run cmd
+	sudo ./flash.sh -r -k APP -G <backup.img> jetson-tx2 mmcblk0p1
+=> this will generate backup.img (small size) & backup.img.raw (full size)
+
+
+Generating sparse img from raw img
+1. Navigate to <home>/nvidia/nvidia_sdk/Jetpack_<version>/Linux_for_Tegra/
+2. Copy raw img to this folder
+3. Run below cmd
+	sudo mksparse -v --fillpattern=0 <raw img file> <sparse img file>
+
+
+Flashing img to Jetson TX2
+1. Install nvidia Jetpack
+2. Rename img file to "system.img"
+3. Copy img file to <home>/nvidia/nvidia_sdk/Jetpack_<version>/Linux_for_Tegra/bootloader
+4. Go back to /Linux_for_Tegra and run cmd
+	sudo ./flash.sh -r -k APP jetson-tx2 mmcblk0p1
+
+TROUBLESHOOT
+_ Flash non-rootfs partitions: drop "-k APP" in flashing cmd
+_ Specify flash size: add "-S <size of img in MiB>MiB" to flashing cmd
+NOTE: if img is not evenly divided by 1024 three times, then it is corrupted
