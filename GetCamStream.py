@@ -1,6 +1,7 @@
 import cv2
 import argparse
 import sys
+from utils.perf import get_meter
 
 CV_WINDOW_NAME = 'Camera'
 
@@ -43,11 +44,16 @@ def main():
     # Create display window
     cv2.namedWindow(CV_WINDOW_NAME)
 
+    overall_meter = get_meter("background")
+
     while (cam.isOpened()):
+        overall_meter.begin()
         ret_val, frame = cam.read()
+        overall_meter.end()
         if (not ret_val):
             print("No image from camera, exiting...")
             break
+        cv2.putText(frame, "(Overall Speed) {:.1f} FPS".format(overall_meter.smooth_speed()), (10,50), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (38,0,255), 1, cv2.LINE_AA)
         prop_val = cv2.getWindowProperty(CV_WINDOW_NAME, cv2.WND_PROP_ASPECT_RATIO)
         if (prop_val < 0.0):
             print('Window closed')
