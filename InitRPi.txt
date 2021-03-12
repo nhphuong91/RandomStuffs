@@ -1,0 +1,34 @@
+go to /etc
+--------------------------------
+edit dhcpcd.conf:
+
+interface eth0
+static ip_address=192.168.129.190/24
+static routers=192.168.129.1
+static domain_name_servers=
+static domain_search=
+--------------------------------
+
+go to /etc/wpa_supplicant
+--------------------------------
+edit wpa_supplicant.conf:
+
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=VN
+
+network={
+        ssid="APName1"
+        psk="pass123"
+        key_mgmt=WPA-PSK
+}
+
+network={
+        ssid="APName2"
+        psk="pass123"
+        key_mgmt=WPA-PSK
+        disabled=1
+}
+
+--------------------------------
+
